@@ -1,0 +1,160 @@
+@import 'css3';
+
+script[type="text/html"] {
+    display: none;
+}
+
+input, textarea, button {
+    border-radius: 0 !important;
+}
+
+.app {
+    @include flex-container-default();
+    @include transition(all, 250ms);
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.conversation {
+    -webkit-flex: 8 0 240px;
+    -webkit-order: 1;
+    -webkit-align-self: stretch;
+
+    box-shadow: #ddd 0 0 10px;
+    border-right: 1px solid #ddd;
+}
+
+.message {
+    @include flex-container-default();
+
+    position: relative;
+    padding: 10px 20px;
+
+    .sender {
+        -webkit-flex: 1 0 80px;
+        -webkit-order: 1;
+        -webkit-align-self: stretch;
+
+        padding: 5px 10px;
+        text-align: right;
+        color: #666;
+        font-weight: 700;
+    }
+
+    .content {
+        -webkit-flex: 8 0 240px;
+        -webkit-order: 1;
+        -webkit-align-self: stretch;
+
+        padding: 5px 10px;
+        border-left: 1px solid #ddd;
+    }
+}
+
+.message.new {
+    .content {
+        @include flex-container-default();
+        padding: 0;
+    }
+
+    textarea {
+        @include flex-item(1);
+        @include transition(all, 250ms);
+
+        outline: none;
+        padding: 5px 10px;
+        border: none;
+        background-color: #eee;
+        border-top: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+
+        & + button {
+            border-radius: 0;
+            color: #999;
+        }
+    }
+
+    textarea:focus {
+        background-color: #fff;
+
+        & + button {
+            color: #000;
+        }
+    }
+}
+
+.attendees {
+    -webkit-flex: 1 0 240px;
+    -webkit-align-self: stretch;
+    -webkit-order: 2;
+
+    width: 240px;
+    background-color: #fff;
+    overflow-y: auto;
+}
+
+.attendee {
+    padding: 10px 20px;
+    border-top: 1px solid #eee;
+
+   .alias {
+        color: #000;
+        font-weight: 700;
+    }
+
+   .email {
+        color: #999;
+    }
+
+    &> .attendee:first-child {
+        border-top: none;
+    }
+
+    &> .attendee:last-child {
+        box-shadow: #eee 0 5px 5px;
+    }
+
+    &.no-email .alias {
+        font-weight: 400;
+    }
+}
+
+.overlay {
+    @include flex-container-default();
+    @include flex-container-align-items(center);
+    @include flex-justify-content(center);
+
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -100%;
+    bottom: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+
+    .dialog {
+    }
+
+    .login {
+        @include flex-container-default();
+
+        input {
+            padding: 5px 10px;
+            margin-right: 5px;
+        }
+    }
+}
+
+body.overlay-enabled {
+    .app {
+        @include filter(blur(2px));
+    }
+
+    .overlay {
+        top: 0;
+        bottom: 0;
+    }
+}

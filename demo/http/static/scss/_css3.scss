@@ -1,0 +1,111 @@
+/**
+ * shiroyuki/prototype
+ * CSS mixins
+ *
+ * @license MIT
+ * @author jnopporn@shiroyuki.com
+ */
+@mixin flex-container-default() {
+    @include flex-container();
+    @include flex-direction(row);
+    @include flex-warp(wrap);
+    @include flex-container-align-items(stretch);
+}
+
+@mixin flex-container() {
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: flex;
+}
+
+@mixin flex-justify-content($value) {
+    -webkit-justify-content: $value;
+    -moz-justify-content: $value;
+    -ms-justify-content: $value;
+    justify-content: $value;
+}
+
+@mixin flex-item($value) {
+    -webkit-flex: $value;
+    -moz-flex: $value;
+    -ms-flex: $value;
+    flex: $value;
+}
+
+@mixin flex-order($value) {
+    -webkit-flex-order: $value;
+    -moz-flex-order: $value;
+    -ms-flex-order: $value;
+    flex-order: $value;
+}
+
+@mixin flex-direction($direction) {
+    -webkit-flex-direction: $direction;
+    -moz-flex-direction: $direction;
+    -ms-flex-direction: $direction;
+    flex-direction: $direction;
+}
+
+@mixin flex-warp($warp) {
+    -webkit-flex-warp: $warp;
+    -moz-flex-warp: $warp;
+    -ms-flex-warp: $warp;
+    flex-warp: $warp;
+}
+
+@mixin flex-container-align-items($alignment) {
+    -webkit-align-items: $alignment;
+    -moz-align-items: $alignment;
+    -ms-align-items: $alignment;
+    align-items: $alignment;
+}
+
+@mixin flex-container-align-content($alignment) {
+    -webkit-align-content: $alignment;
+    -moz-align-content: $alignment;
+    -ms-align-content: $alignment;
+    align-content: $alignment;
+}
+
+@mixin flex-item-align($alignment) {
+    -webkit-align-self: $alignment;
+    -moz-align-self: $alignment;
+    -ms-align-self: $alignment;
+    align-self: $alignment;
+}
+
+@mixin filter($function) {
+    -webkit-filter: $function;
+    -moz-filter: $function;
+    -ms-filter: $function;
+    filter: $function;
+}
+
+@mixin transform($execution) {
+    -webkit-transform: $execution;
+    -moz-transform: $execution;
+    -ms-transform: $execution;
+    transform: $execution;
+}
+
+@mixin transform-origin($position) {
+    -webkit-transform-origin: $position;
+    -moz-transform-origin: $position;
+    -ms-transform-origin: $position;
+    transform-origin: $position;
+}
+
+@mixin transition($property, $speed) {
+    -webkit-transition: $property ease $speed;
+    -moz-transition: $property ease $speed;
+    -ms-transition: $property ease $speed;
+    transition: $property ease $speed;
+}
+
+@mixin transition_with_delay($property, $speed, $delay) {
+    -webkit-transition: $property ease $speed;
+    -moz-transition: $property ease $speed;
+    -ms-transition: $property ease $speed;
+    transition: $property ease $speed;
+}
