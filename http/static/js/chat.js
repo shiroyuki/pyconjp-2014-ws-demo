@@ -1,5 +1,6 @@
 var templates = new TemplateController(),
-    selectors = {}
+    selectors = {},
+    websocket = new WebSocketClient()
 ;
 
 function renderAttendee(alias, email) {
@@ -44,6 +45,8 @@ function main() {
     selectors.loginForm.on('submit', onLoginSubmit);
     selectors.newMessageForm.on('submit', onNewMessageSubmit);
     selectors.newMessageForm.find('[name=message]').on('keypress', onEnterPress);
+
+    websocket.connect();
 
     /*
     renderAttendee('Juti', 'jnopporn@shiroyuki.com');
