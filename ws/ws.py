@@ -7,7 +7,7 @@
 from tornado.web import Application
 from tornado.websocket import WebSocketHandler
 
-class MessageRelayWebSocket(websocket.WebSocketHandler):
+class MessageRelayWebSocket(WebSocketHandler):
     def open(self):
         print "WebSocket opened"
 
