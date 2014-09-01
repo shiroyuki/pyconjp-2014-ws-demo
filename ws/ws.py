@@ -4,7 +4,8 @@
 
     For the real implementation
 """
-from tornado.web import Application
+from tornado.ioloop    import IOLoop
+from tornado.web       import Application
 from tornado.websocket import WebSocketHandler
 
 class MessageRelayWebSocket(WebSocketHandler):
@@ -17,10 +18,23 @@ class MessageRelayWebSocket(WebSocketHandler):
     def on_close(self):
         print "WebSocket closed"
 
-app = Application([
-    (r'/ws', MessageRelayWebSocket),
-])
+def main():
+    debug  = True
+    routes = [
+        (r'/ws', MessageRelayWebSocket),
+    ]
 
-http_server = httpserver.HTTPServer(application)
-http_server.listen(8080)
-ioloop.IOLoop.instance().start()
+    app = Application(routes, debug = debug)
+    app.listen(8080, '0.0.0.0') # listen to everyone
+
+    try:
+        print('Control+C to stop the service.')
+        IOLoop.instance().start()
+    except KeyboardInterrupt as exception:
+        print('')
+        print('Gracefully shutting down the service...')
+
+    print('The service is now offline.')
+
+if __name__ == '__main__':
+    main()
