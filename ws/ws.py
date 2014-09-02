@@ -1,8 +1,12 @@
 """ Web Socket """
 import json
+
+from pika.connection   import URLParameters
 from tornado.ioloop    import IOLoop
 from tornado.web       import Application
 from tornado.websocket import WebSocketHandler
+
+from amqp import AMQPManager
 
 class MessageRelayWebSocket(WebSocketHandler):
     buddies = {}
@@ -99,6 +103,8 @@ def main():
     routes = [
         (r'/relay', MessageRelayWebSocket),
     ]
+    amqp_url = URLParameters('amqp://guest:guest@localhost:5672/%2f?heartbeat_interval=15')
+    amqp = AMQPManager(amqp_url)
 
     app = Application(routes, debug = debug)
     app.listen(8080, '0.0.0.0') # listen to everyone
