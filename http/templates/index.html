@@ -28,9 +28,13 @@
 
     <div class="overlay">
         <form class="dialog login">
-            <input name="sname" placeholder="What is your screen name?"/>
-            <button class="btn btn-default">Login</button>
+            <input name="sname" size="30" minlength="30" maxlength="30" placeholder="What is your screen name?" disabled/>
+            <button class="btn btn-primary" disabled>Login</button>
         </form>
+        <div class="dialog reconnection">
+            <h3>Lost connection!</h3>
+            <button type="button" class="btn btn-danger">Reconnect</button>
+        </div>
     </div>
 
     <script type="text/html" data-name="message">

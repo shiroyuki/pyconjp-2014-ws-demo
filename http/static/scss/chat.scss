@@ -141,9 +141,33 @@ input, textarea, button {
     .login {
         @include flex-container-default();
 
+        * {
+            font-weight: 200;
+            letter-spacing: 1px;
+        }
+
         input {
             padding: 5px 10px;
-            margin-right: 5px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+        }
+    }
+    
+    .reconnection {
+        display: none;
+        text-align: center;
+        background-color: #333;
+        color: #fff;
+        
+        h3 {
+            margin-top: 0;
+            margin-bottom: 0;
+            padding: 30px 40px;
+        }
+        
+        button {
+            width: 100%;
         }
     }
 }
@@ -156,5 +180,20 @@ body.overlay-enabled {
     .overlay {
         top: 0;
         bottom: 0;
+    }
+}
+
+body.offline {
+    .overlay {
+        top: 0;
+        bottom: 0;
+        
+        .dialog {
+            display: none;
+        }
+        
+        .dialog.reconnect {
+            display: block;
+        }
     }
 }

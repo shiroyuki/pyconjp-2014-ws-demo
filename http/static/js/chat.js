@@ -1,4 +1,5 @@
-var templates = new TemplateController(),
+var id = null,
+    templates = new TemplateController(),
     selectors = {},
     websocket = new WebSocketClient()
 ;
@@ -10,6 +11,7 @@ function renderAttendee(alias, email) {
 
     $template = $(template);
 
+    $template.attr('data-id', alias);
     $template.children('.alias').text(alias);
 
     if (email === undefined) {
@@ -28,7 +30,6 @@ function renderMessage(sender, content) {
     ;
 
     $template = $(template);
-
     $template.children('.sender').text(sender);
     $template.children('.content').text(content);
 
@@ -39,12 +40,22 @@ function main() {
     selectors.body           = $('body');
     selectors.attendees      = $('.attendees');
     selectors.conversation   = $('.conversation');
-    selectors.loginForm      = $('.overlay form.login');
+    selectors.loginForm      = $('.overlay .dialog.login');
+    selectors.reconnection   = $('.overlay .dialog.reconnection');
     selectors.newMessageForm = selectors.conversation.find('.message.new');
+    selectors.allInputs      = selectors.body.find('form').find('input, button, textarea');
 
     selectors.loginForm.on('submit', onLoginSubmit);
     selectors.newMessageForm.on('submit', onNewMessageSubmit);
     selectors.newMessageForm.find('[name=message]').on('keypress', onEnterPress);
+
+    websocket.on('open', onWSOpen);
+    websocket.on('close', onWSClose);
+    websocket.on('_identify', onWSIdentify);
+    websocket.on('_buzz', onWSBuzz);
+    websocket.on('_buddy_list', onWSBuddyList);
+    websocket.on('_user_enter', onWSUserEnter);
+    websocket.on('_user_leave', onWSUserLeave);
 
     websocket.connect();
 
