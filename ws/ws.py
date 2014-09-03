@@ -36,11 +36,13 @@ class MessageRelayWebSocket(WebSocketHandler):
     def on_close(self):
         # At this stage, we only unregister this instance of websocket to the global map.
         if self.id in MessageRelayWebSocket.buddies:
+            del MessageRelayWebSocket.buddies[self.id]
+
+            print('! from {} ({}, leaving)'.format(self.ip, self.id))
+
             self.consumer.abort()
             self.consumer.lock.acquire()
             self.consumer.lock.release()
-
-            del MessageRelayWebSocket.buddies[self.id]
 
             self.broadcast('user_leave', {'id': self.id})
 
