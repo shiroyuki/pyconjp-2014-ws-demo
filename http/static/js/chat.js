@@ -9,6 +9,10 @@ function renderAttendee(alias, email) {
         $template
     ;
 
+    if (selectors.attendees.find('[data-id="' + alias + '"]').length !== 0) {
+        return;
+    }
+
     $template = $(template);
 
     $template.attr('data-id', alias);

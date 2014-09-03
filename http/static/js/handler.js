@@ -43,8 +43,9 @@ function onNewMessageSubmit(e) {
         method: 'message',
         content: content
     });
-    
-    renderMessage(id, content);
+
+    // Leave the message to be displayed by the callback from the websocket.
+    //renderMessage(id, content);
 }
 
 function onWSOpen(event) {
@@ -60,15 +61,15 @@ function onWSClose(event) {
 
 function onWSIdentify(data) {
     selectors.allInputs.attr('disabled', false);
-    
+
     if (!data.success) {
         alert(data.reason);
-        
+
         return;
     }
-    
+
     id = data.id
-    
+
     renderAttendee(data.id);
     selectors.body.removeClass('overlay-enabled');
     selectors.loginForm.hide();
