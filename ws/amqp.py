@@ -1,4 +1,5 @@
 from pika.adapters.blocking_connection import BlockingConnection
+from pika.spec import BasicProperties
 from pika.exceptions import ProbableAuthenticationError, ConsumerCancelled, ConnectionClosed
 from threading import Thread, Lock
 
@@ -38,7 +39,11 @@ class Publisher(AMQPAgent):
         self._kwargs.update({
             'exchange':    self._exchange, # force to use the fanout exchange in this demo.
             'routing_key': '',             # rounting key, but we don't need this one as we go with the exchange.
-            'body':        message         # the message body
+            'body':        message,        # the message body
+            'properties':  pika.BasicProperties(
+                content_type  = 'application/json',
+                delivery_mode = 1
+            ) # force to send the message in JSON
         })
 
         self.start()

@@ -1,13 +1,23 @@
+{%- set use_cdn = False -%}
+{%- set css_files = [
+    '//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css' if use_cdn else url_for('static', filename='vendors/bootstrap-3.1.0/css/bootstrap.min.css'),
+    url_for('static', filename='css/chat.css')
+] -%}
+{%- set js_files = [
+    '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js' if use_cdn else url_for('static', filename='vendors/jquery.js'),
+    '//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js' if use_cdn else url_for('static', filename='vendors/bootstrap-3.1.0/js/bootstrap.min.js'),
+    url_for('static', filename='js/template_controller.js'),
+    url_for('static', filename='js/ws.js'),
+    url_for('static', filename='js/handler.js'),
+    url_for('static', filename='js/chat.js')
+] -%}
 <!doctype html>
 <html>
 <head>
     <meta charset="utf-8">
     <title>Hanashi</title>
 
-    {%- for css_file in [
-        '//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css',
-        url_for('static', filename='css/chat.css')
-    ] -%}
+    {%- for css_file in css_files -%}
         <link href="{{ css_file }}" rel="stylesheet">
     {%- endfor -%}
 </head>
@@ -33,7 +43,7 @@
         </form>
         <div class="dialog reconnection">
             <h3>Lost connection!</h3>
-            <button type="button" class="btn btn-danger">Reconnect</button>
+            <button type="button" class="btn btn-danger" onclick="history.go(0);">Reconnect (Reload the page)</button>
         </div>
     </div>
 
@@ -52,14 +62,7 @@
         </div>
     </script>
 
-    {%- for js_file in [
-        '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js',
-        '//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js',
-        url_for('static', filename='js/template_controller.js'),
-        url_for('static', filename='js/ws.js'),
-        url_for('static', filename='js/handler.js'),
-        url_for('static', filename='js/chat.js')
-    ] -%}
+    {%- for js_file in js_files -%}
         <script src="{{ js_file }}"></script>
     {%- endfor -%}
 </body>
