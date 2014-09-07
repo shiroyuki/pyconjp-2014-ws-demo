@@ -56,11 +56,17 @@ WebSocketClient.prototype.send = function (message) {
 };
 
 WebSocketClient.prototype.onMessage = function (event) {
-    var data = JSON.parse(event.data),
+    var data,
         type,
         handlers,
         i
     ;
+
+    try {
+        data = JSON.parse(event.data);
+    } catch (e) {
+        console.log('Unprocessed data: ', event.data);
+    }
 
     type = '_' + data.type;
 
