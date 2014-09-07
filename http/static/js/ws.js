@@ -65,7 +65,7 @@ WebSocketClient.prototype.onMessage = function (event) {
     try {
         data = JSON.parse(event.data);
     } catch (e) {
-        console.log('Unprocessed data: ', event.data);
+        return console.log('Unprocessed data: ', event.data);
     }
 
     type = '_' + data.type;
