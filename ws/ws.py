@@ -41,8 +41,6 @@ class MessageRelayWebSocket(WebSocketHandler):
             print('! from {} ({}, leaving)'.format(self.ip, self.id))
 
             self.consumer.abort()
-            self.consumer.lock.acquire()
-            self.consumer.lock.release()
 
             self.broadcast('user_leave', {'id': self.id})
 

@@ -1,7 +1,12 @@
+import logging
 from pika.adapters.blocking_connection import BlockingConnection
 from pika.spec import BasicProperties
 from pika.exceptions import ProbableAuthenticationError, ConsumerCancelled, ConnectionClosed
 from threading import Thread, Lock
+
+LOG_FORMAT = ('%(levelname) -10s %(asctime)s %(name) -30s %(funcName) '
+              '-35s %(lineno) -5d: %(message)s')
+logger = logging.getLogger(__name__)
 
 class Message(object):
     def __init__(self, sender, body):
@@ -10,6 +15,7 @@ class Message(object):
 
 class AMQPAgent(Thread):
     def __init__(self, channel):
+        logger.info('Prepare')
         super(AMQPAgent, self).__init__()
 
         self._exchange      = 'demo-chat' # "demo-chat" exchange, durable, fan-out on all routes
@@ -40,22 +46,21 @@ class Publisher(AMQPAgent):
             'exchange':    self._exchange, # force to use the fanout exchange in this demo.
             'routing_key': '',             # rounting key, but we don't need this one as we go with the exchange.
             'body':        message,        # the message body
-            'properties':  pika.BasicProperties(
+            'properties':  BasicProperties(
                 content_type  = 'application/json',
                 delivery_mode = 1
             ) # force to send the message in JSON
         })
 
+        logger.info('Publish({})'.format(self._kwargs))
+
         self.start()
 
     def run(self):
-        self._lock.acquire()
+        if not self._channel.is_open:
+            self._channel.open()
 
-        if self._channel.is_open:
-            self._channel.basic_publish(**self._kwargs)
-
-        self._lock.release()
-
+        self._channel.basic_publish(**self._kwargs)
 
 class Consumer(AMQPAgent):
     """ Consumer
@@ -75,18 +80,18 @@ class Consumer(AMQPAgent):
         self.start()
 
     def abort(self):
-        self._lock.acquire()
-
         try:
-            self._channel.stop_consuming()                            # Stop consuming
-            self._channel.queue_delete(self._queue_name, nowait=True) # Ensure that the queue is deleted.
+            self._channel.stop_consuming() # Stop consuming
+
+            if not self._channel.is_open:
+                self._channel.open()
+
+            self._channel.queue_delete(self._queue_name) # Ensure that the queue is deleted.
             self._channel.close()
             print('AMQP/Consumer - Consumer {} aborted'.format(self._queue_name))
         except RuntimeError as e:
             print('AMQP/Consumer - Consumer {} aborted with error'.format(self._queue_name))
             print('AMQP/Consumer - {}: {}'.format(e.__class__.__name__, e.message))
-
-        self._lock.release()
 
         self._active = False
 
@@ -117,10 +122,15 @@ class AMQPManager(object):
     def __init__(self, parameters):
         self._parameters      = parameters
         self._connection_type = BlockingConnection
+        self._connection      = None
         self._agent           = {}
 
     def connection(self):
-        return self._connection_type(self._parameters)
+
+        if not self._connection:
+            self._connection = self._connection_type(self._parameters)
+
+        return self._connection
 
     def channel(self):
         return self.connection().channel()
