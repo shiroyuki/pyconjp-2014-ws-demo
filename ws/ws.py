@@ -129,6 +129,15 @@ def main():
     amqp_url = URLParameters('amqp://guest:guest@localhost:5672/%2f?heartbeat_interval=15')
     amqp = AMQPManager(amqp_url)
 
+    # Declare the exchange
+    channel = amqp.channel()
+    channel.exchange_declare(
+        exchange = 'demo-chat',
+        exchange_type = 'fanout',
+        durable = True
+    )
+    channel.close()
+
     app = Application(routes, debug = debug, amqp = amqp)
     app.listen(8080, '0.0.0.0') # listen to everyone
 
